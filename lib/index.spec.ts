@@ -1,19 +1,27 @@
 import { expect } from 'chai';
 import { NlpHub } from './index';
+import fs from 'fs';
 
 describe('nlp-hub', () => {
+  
   it('can be constructed', () => {
-    const sut: NlpHub = new NlpHub('lib/test/app.json');
+    const filePath: string = 'lib/test/app.json';
+    const configuration = JSON.parse(fs.readFileSync(`${filePath}`, 'utf8'));
+    const sut: NlpHub = new NlpHub(configuration);
     expect(sut).to.be.instanceof(NlpHub);
   });
 
   it('can be set threshold', () => {
-    const sut: NlpHub = new NlpHub('lib/test/app.json');
+    const filePath: string = 'lib/test/app.json';
+    const configuration = JSON.parse(fs.readFileSync(`${filePath}`, 'utf8'));
+    const sut: NlpHub = new NlpHub(configuration);
     expect(sut.threshold).to.be.equals('0.8');
   });
 
   it('can be set apps', () => {
-    const sut: NlpHub = new NlpHub('lib/test/app.json');
+    const filePath: string = 'lib/test/app.json';
+    const configuration = JSON.parse(fs.readFileSync(`${filePath}`, 'utf8'));
+    const sut: NlpHub = new NlpHub(configuration);
     expect(sut.apps[0].id).to.be.equals('HolaRegex');
   });
 
@@ -21,8 +29,10 @@ describe('nlp-hub', () => {
     describe('regex', () => {
 
       it('pass "Hola" and get greetings', async () => {
-        const sut: NlpHub = new NlpHub('lib/test/app.json');
-        const utterance: string = 'Hola';
+        const filePath: string = 'lib/test/app.json';
+        const configuration = JSON.parse(fs.readFileSync(`${filePath}`, 'utf8'));
+        const sut: NlpHub = new NlpHub(configuration);
+            const utterance: string = 'Hola';
         const responseExpected = {
           engine: 'regex',
           intent: {
@@ -35,7 +45,9 @@ describe('nlp-hub', () => {
       });
 
       it('pass "Comprar vuelo" and get recommender', async () => {
-        const sut: NlpHub = new NlpHub('lib/test/app.json');
+        const filePath: string = 'lib/test/app.json';
+        const configuration = JSON.parse(fs.readFileSync(`${filePath}`, 'utf8'));
+        const sut: NlpHub = new NlpHub(configuration);
         const utterance: string = 'Comprar vuelo';
         const responseExpected = {
           engine: 'regex',
@@ -49,7 +61,9 @@ describe('nlp-hub', () => {
       });
 
       it('pass "asd" and get none', async () => {
-        const sut: NlpHub = new NlpHub('lib/test/app.json');
+        const filePath: string = 'lib/test/app.json';
+        const configuration = JSON.parse(fs.readFileSync(`${filePath}`, 'utf8'));
+        const sut: NlpHub = new NlpHub(configuration);
         const utterance: string = 'asd';
         const responseExpected = {
           engine: 'regex',

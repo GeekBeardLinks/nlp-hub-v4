@@ -4,14 +4,18 @@ import { RasaApp } from './engines/rasa/rasa';
 import { RegexApp } from './engines/regex';
 import { IApp } from './model/app';
 
+export interface INlpHubConfiguration {
+  threshold: number;
+  apps: IApp[];
+}
+
 export class NlpHub {
-    public threshold = 0.8;
+    public threshold: number;
     public apps!: IApp[];
 
-    constructor(filePath: string) {
-        const definition = JSON.parse(fs.readFileSync(`${filePath}`, 'utf8'));
-        this.threshold = definition.threshold;
-        this.apps = definition.apps;
+    constructor(configuration: INlpHubConfiguration) {
+        this.threshold = configuration.threshold || 0.8;
+        this.apps = configuration.apps || [];
     }
 
     public async firstMatch(utterance: string) {
