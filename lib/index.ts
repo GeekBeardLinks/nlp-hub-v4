@@ -3,6 +3,7 @@ import { LuisApp } from './engines/luis/luis';
 import { RasaApp } from './engines/rasa/rasa';
 import { RegexApp } from './engines/regex/regex';
 import { IApp } from './model/app';
+import { Recognizer } from './engines/recognizer';
 
 export interface INlpHubConfiguration {
   threshold: number;
@@ -25,8 +26,9 @@ export class NlpHub {
 
     public async firstMatch(utterance: string) {
 
-        for (const app of this.apps) {
-          const returnOfApp: any = await this.appProcess(app, utterance);
+      for (var _i = 0; _i < this.recognizers.length; _i++) {
+        var recognizer = this.recognizers[_i];
+        const returnOfApp: any = await this.appProcess(recognizer, this.apps[_i], utterance);
           if (returnOfApp !== null) {
             if (returnOfApp.intent.score > this.threshold) {
               return returnOfApp;
@@ -54,16 +56,13 @@ export class NlpHub {
     }
     }
 
-    public async appProcess(app: any, utterance: any) {
-        if (app.type === 'regex') {
-            const regexApp: RegexApp = new RegexApp();
-            return (await regexApp.regex(app, utterance));
-        } else if (app.type === 'luis') {
-          const luisApp: LuisApp = new LuisApp();
-          return (await luisApp.luis(app, utterance));
-        } else if (app.type === 'rasa') {
-          const luisApp: RasaApp = new RasaApp();
-          return (await luisApp.rasa(app, utterance));
+    public async appProcess(recognizer: Recognizer, app: any, utterance: any) {
+        if (recognizer instanceof RegexApp) {
+            return (await recognizer.regex(app, utterance));
+        } else if (recognizer instanceof LuisApp) {
+          return (await recognizer.luis(app, utterance));
+        } else if (recognizer instanceof RasaApp) {
+          return (await recognizer.rasa(app, utterance));
         } else {
           return (null);
         }
