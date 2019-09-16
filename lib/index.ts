@@ -60,7 +60,7 @@ export class NlpHub {
         if (recognizer instanceof RegexApp) {
             return (await recognizer.recognize(utterance));
         } else if (recognizer instanceof LuisApp) {
-          return (await recognizer.luis(app, utterance));
+          return (await recognizer.recognize(utterance));
         } else if (recognizer instanceof RasaApp) {
           return (await recognizer.rasa(app, utterance));
         } else {
