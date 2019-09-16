@@ -4,17 +4,35 @@ export class RegexApp extends Recognizer {
     
     regExp: RegExp | undefined;
     intent: string | undefined;
+    id: any;
 
     constructor(configuration?: IApp) {
         super();
         if(configuration) {
             this.regExp = new RegExp(configuration.exp, 'i');
             this.intent = configuration.intent;
+            this.id = configuration.id;
         }
     }
 
     recognize(utterance: string): Promise<IRecognizerResponse> {
-        throw new Error("Method not implemented.");
+        return new Promise((resolve, reject) => {
+            if(this.regExp) {
+                const match = utterance.match(this.regExp);
+                let response: IRecognizerResponse =  {
+                    id: this.id,
+                    engine: 'regex',
+                    intent: {
+                        name: this.intent || '',
+                        score: match != null ? 1 : 0,
+                    },
+                    entities: []
+                };
+                resolve(response);
+            } else {
+                reject('Error no regex defined');
+            }
+        });
     }
 
     public async regex(app: IApp , utterance: string): Promise<any> {

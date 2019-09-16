@@ -58,7 +58,7 @@ export class NlpHub {
 
     public async appProcess(recognizer: Recognizer, app: any, utterance: any) {
         if (recognizer instanceof RegexApp) {
-            return (await recognizer.regex(app, utterance));
+            return (await recognizer.recognize(utterance));
         } else if (recognizer instanceof LuisApp) {
           return (await recognizer.luis(app, utterance));
         } else if (recognizer instanceof RasaApp) {
