@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { LuisApp } from './engines/luis/luis';
 import { RasaApp } from './engines/rasa/rasa';
-import { RegexApp } from './engines/regex';
+import { RegexApp } from './engines/regex/regex';
 import { IApp } from './model/app';
 
 export interface INlpHubConfiguration {
@@ -12,10 +12,15 @@ export interface INlpHubConfiguration {
 export class NlpHub {
     public threshold: number;
     public apps!: IApp[];
+    public recognizers!: any[];
 
     constructor(configuration: INlpHubConfiguration) {
         this.threshold = configuration.threshold || 0.8;
         this.apps = configuration.apps || [];
+        this.recognizers = []
+        for (const app of this.apps) {
+          this.recognizers.push(this.instanciateRecognizer(app));
+        }
     }
 
     public async firstMatch(utterance: string) {
@@ -36,6 +41,19 @@ export class NlpHub {
                 },
               });
       }
+
+    public instanciateRecognizer(app: IApp) {
+      if (app.type === 'regex') {
+        return new RegexApp(app);
+    } else if (app.type === 'luis') {
+      return new LuisApp(app);
+    } else if (app.type === 'rasa') {
+      return new RasaApp(app);
+    } else {
+      return (null);
+    }
+    }
+
     public async appProcess(app: any, utterance: any) {
         if (app.type === 'regex') {
             const regexApp: RegexApp = new RegexApp();

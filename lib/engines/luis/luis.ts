@@ -1,8 +1,17 @@
 import http = require('http');
 import localVarRequest = require('request');
-import { IApp, IAppResponse } from '../../model/app';
+import { IApp, IAppResponse, IRecognizerResponse } from '../../model/app';
 import { IEntityLuis, IIntentLuis, ILuisResponse } from '../../model/luis-response';
-export class LuisApp {
+import { Recognizer } from '../recognizer';
+export class LuisApp extends Recognizer {
+
+    constructor(configuration?: IApp){
+        super();
+    }
+
+    recognize(utterance: string): Promise<IRecognizerResponse> {
+        throw new Error("Method not implemented.");
+    }
 
     public async luis(app: IApp, utterance: string): Promise<any> {
             const options: localVarRequest.Options = {

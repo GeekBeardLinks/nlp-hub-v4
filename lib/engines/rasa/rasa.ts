@@ -1,9 +1,18 @@
 import http = require('http');
 import localVarRequest = require('request');
-import { IApp, IAppResponse } from '../../model/app';
+import { IApp, IAppResponse, IRecognizerResponse } from '../../model/app';
 import { IIntentLuis } from '../../model/luis-response';
 import { IEntitYRasa, IRasaResponse } from '../../model/rasa-response';
-export class RasaApp {
+import { Recognizer } from '../recognizer';
+export class RasaApp extends Recognizer{
+    
+    constructor(configuration?: IApp){
+        super();
+    }
+
+    recognize(utterance: string): Promise<IRecognizerResponse> {
+        throw new Error("Method not implemented.");
+    }
 
     public async rasa(app: IApp, utterance: string): Promise<any> {
             const options: localVarRequest.Options = {
