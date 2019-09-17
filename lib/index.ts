@@ -6,6 +6,7 @@ import { IApp } from './model/app';
 
 export interface INlpHubConfiguration {
   threshold: number;
+  defaultIntent: string;
   apps: IApp[];
 }
 

@@ -5,6 +5,7 @@ import fs from 'fs';
 describe('nlp-hub', () => {
   const configuration: INlpHubConfiguration = {
     threshold: 0.8,
+    defaultIntent: 'default',
     apps: [
         { id: "HolaRegex", type: "regex", intent: "greetings", exp: "(^hola$|^holaa$|^holas$|^holi$|^holis$|^hi$|^hello$)" },
         { id: "recommender", intent: "recommender", exp: "^Comprar vuelo$", type: "regex" },
