@@ -16,3 +16,16 @@ export interface IAppResponse {
     intent: IIntentLuis;
     originalResponse: any;
 }
+
+export interface IRecognizerResponse {
+    engine: string;
+    entities: any;
+    intent: IRecognizerIntent;
+    id: string;
+    originalResponse?: any;
+}
+
+export interface IRecognizerIntent {
+    name: string;
+    score: number;
+}

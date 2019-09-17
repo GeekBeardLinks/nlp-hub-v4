@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import { LuisApp } from '../luis';
+import { LuisRecognizer } from '../luis';
 
 describe('LuisApp', () => {
     it('Can be instantiated', () => {
-        const sut: LuisApp = new LuisApp();
-        expect(sut).to.be.a.instanceOf(LuisApp);
+        const sut: LuisRecognizer = new LuisRecognizer();
+        expect(sut).to.be.a.instanceOf(LuisRecognizer);
     });
 });
