@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { LuisApp } from './engines/luis/luis';
 import { RasaApp } from './engines/rasa/rasa';
-import { RegexApp } from './engines/regex';
+import { RegexApp } from './engines/regex/regex';
 import { IApp } from './model/app';
 
 export interface INlpHubConfiguration {
@@ -12,16 +12,20 @@ export interface INlpHubConfiguration {
 export class NlpHub {
     public threshold: number;
     public apps!: IApp[];
+    public recognizers!: any[];
 
     constructor(configuration: INlpHubConfiguration) {
         this.threshold = configuration.threshold || 0.8;
         this.apps = configuration.apps || [];
+        this.recognizers = []
+        for (const app of this.apps) {
+          this.recognizers.push(this.instanciateRecognizer(app));
+        }
     }
 
     public async firstMatch(utterance: string) {
-
-        for (const app of this.apps) {
-          const returnOfApp: any = await this.appProcess(app, utterance);
+      for (const recognizer of this.recognizers) {
+        const returnOfApp: any = await recognizer.recognize(utterance);
           if (returnOfApp !== null) {
             if (returnOfApp.intent.score > this.threshold) {
               return returnOfApp;
@@ -36,18 +40,16 @@ export class NlpHub {
                 },
               });
       }
-    public async appProcess(app: any, utterance: any) {
-        if (app.type === 'regex') {
-            const regexApp: RegexApp = new RegexApp();
-            return (await regexApp.regex(app, utterance));
-        } else if (app.type === 'luis') {
-          const luisApp: LuisApp = new LuisApp();
-          return (await luisApp.luis(app, utterance));
-        } else if (app.type === 'rasa') {
-          const luisApp: RasaApp = new RasaApp();
-          return (await luisApp.rasa(app, utterance));
-        } else {
-          return (null);
-        }
+
+    public instanciateRecognizer(app: IApp) {
+      if (app.type === 'regex') {
+        return new RegexApp(app);
+    } else if (app.type === 'luis') {
+      return new LuisApp(app);
+    } else if (app.type === 'rasa') {
+      return new RasaApp(app);
+    } else {
+      return (null);
+    }
     }
 }

@@ -36,11 +36,13 @@ describe('nlp-hub', () => {
         const sut: NlpHub = new NlpHub(configuration);
         const utterance: string = 'Hola';
         const responseExpected = {
+          id: 'HolaRegex',
           engine: 'regex',
           intent: {
             name: 'greetings',
             score: 1,
           },
+          entities: []
         };
         const response: any = await sut.firstMatch(utterance);
         expect(response).to.be.deep.equals(responseExpected);
@@ -50,11 +52,13 @@ describe('nlp-hub', () => {
         const sut: NlpHub = new NlpHub(configuration);
         const utterance: string = 'Comprar vuelo';
         const responseExpected = {
+          id: 'recommender',
           engine: 'regex',
           intent: {
             name: 'recommender',
             score: 1,
           },
+          entities: []
         };
         const response: any = await sut.firstMatch(utterance);
         expect(response).to.be.deep.equals(responseExpected);
