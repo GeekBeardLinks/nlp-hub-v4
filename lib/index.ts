@@ -62,7 +62,7 @@ export class NlpHub {
         } else if (recognizer instanceof LuisApp) {
           return (await recognizer.recognize(utterance));
         } else if (recognizer instanceof RasaApp) {
-          return (await recognizer.rasa(app, utterance));
+          return (await recognizer.recognize(utterance));
         } else {
           return (null);
         }
