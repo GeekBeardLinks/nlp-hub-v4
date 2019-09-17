@@ -3,6 +3,7 @@ import { LuisApp } from './engines/luis/luis';
 import { RasaApp } from './engines/rasa/rasa';
 import { RegexApp } from './engines/regex/regex';
 import { IApp } from './model/app';
+import { DefaultRecognizer } from './engines/default/default';
 
 export interface INlpHubConfiguration {
   threshold: number;
@@ -18,10 +19,11 @@ export class NlpHub {
     constructor(configuration: INlpHubConfiguration) {
         this.threshold = configuration.threshold || 0.8;
         this.apps = configuration.apps || [];
-        this.recognizers = []
+        this.recognizers = [];
         for (const app of this.apps) {
           this.recognizers.push(this.instanciateRecognizer(app));
         }
+        this.recognizers.push(new DefaultRecognizer(configuration));
     }
 
     public async firstMatch(utterance: string) {
