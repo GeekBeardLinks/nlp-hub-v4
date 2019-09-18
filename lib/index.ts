@@ -11,6 +11,12 @@ export interface INlpHubConfiguration {
   apps: IApp[];
 }
 
+let recognizersMap: {[index: string]: any} = {
+    'regex': RegexRecognizer,
+    'luis': LuisRecognizer,
+    'rasa': RasaRecognizer
+}
+
 export class NlpHub {
     public threshold: number;
     public apps!: IApp[];
@@ -21,7 +27,10 @@ export class NlpHub {
         this.apps = configuration.apps || [];
         this.recognizers = [];
         for (const app of this.apps) {
-          this.recognizers.push(this.instanciateRecognizer(app));
+          let recognizer = this.instanciateRecognizer(app);
+          if (recognizer){
+            this.recognizers.push(recognizer);
+          }
         }
         this.recognizers.push(new DefaultRecognizer(configuration));
     }
@@ -34,18 +43,14 @@ export class NlpHub {
               return returnOfApp;
           }
         }
-      }
     }
+  }
 
     public instanciateRecognizer(app: IApp) {
-      if (app.type === 'regex') {
-        return new RegexRecognizer(app);
-    } else if (app.type === 'luis') {
-      return new LuisRecognizer(app);
-    } else if (app.type === 'rasa') {
-      return new RasaRecognizer(app);
-    } else {
-      return (null);
-    }
+      if (app.type in recognizersMap) {
+        return new recognizersMap[app.type](app);
+      } else {
+        return (null);
+      }
     }
 }
