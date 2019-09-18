@@ -3,9 +3,11 @@ import { LuisRecognizer } from './engines/luis/luis';
 import { RasaRecognizer } from './engines/rasa/rasa';
 import { RegexRecognizer } from './engines/regex/regex';
 import { IApp } from './model/app';
+import { DefaultRecognizer } from './engines/default/default';
 
 export interface INlpHubConfiguration {
   threshold: number;
+  defaultIntent: string;
   apps: IApp[];
 }
 
@@ -17,10 +19,11 @@ export class NlpHub {
     constructor(configuration: INlpHubConfiguration) {
         this.threshold = configuration.threshold || 0.8;
         this.apps = configuration.apps || [];
-        this.recognizers = []
+        this.recognizers = [];
         for (const app of this.apps) {
           this.recognizers.push(this.instanciateRecognizer(app));
         }
+        this.recognizers.push(new DefaultRecognizer(configuration));
     }
 
     public async firstMatch(utterance: string) {
@@ -29,17 +32,10 @@ export class NlpHub {
           if (returnOfApp !== null) {
             if (returnOfApp.intent.score > this.threshold) {
               return returnOfApp;
-            }
           }
         }
-        return({
-                engine: 'regex',
-                intent: {
-                  name: 'NoneDialog',
-                  score: 1,
-                },
-              });
       }
+    }
 
     public instanciateRecognizer(app: IApp) {
       if (app.type === 'regex') {

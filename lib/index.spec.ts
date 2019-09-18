@@ -5,6 +5,7 @@ import fs from 'fs';
 describe('nlp-hub', () => {
   const configuration: INlpHubConfiguration = {
     threshold: 0.8,
+    defaultIntent: 'default',
     apps: [
         { id: "HolaRegex", type: "regex", intent: "greetings", exp: "(^hola$|^holaa$|^holas$|^holi$|^holis$|^hi$|^hello$)" },
         { id: "recommender", intent: "recommender", exp: "^Comprar vuelo$", type: "regex" },
@@ -76,6 +77,30 @@ describe('nlp-hub', () => {
         };
         //const response: any = await sut.firstMatch(utterance);
         //expect(response).to.be.deep.equals(responseExpected);
+      });
+
+      it('pass "test default" and get default', async () => {
+        const caseConfiguration: INlpHubConfiguration = {
+          threshold: 0.8,
+          defaultIntent: 'defaultIntent',
+          apps: [
+              { id: "HolaRegex", type: "regex", intent: "greetings", exp: "(^hola$|^holaa$|^holas$|^holi$|^holis$|^hi$|^hello$)" },
+              { id: "recommender", intent: "recommender", exp: "^Comprar vuelo$", type: "regex" }
+          ]
+        };
+        const sut: NlpHub = new NlpHub(caseConfiguration);
+        const utterance: string = 'test default';
+        const responseExpected = {
+          id: 'default',
+          engine: 'default',
+          intent: {
+            name: 'defaultIntent',
+            score: 1,
+          },
+          entities: []
+        };
+        const response: any = await sut.firstMatch(utterance);
+        expect(response).to.be.deep.equals(responseExpected);
       });
 
     } );
