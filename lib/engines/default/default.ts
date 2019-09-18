@@ -2,6 +2,10 @@ import { Recognizer } from "../recognizer";
 import { IRecognizerResponse, IApp } from "../../model/app";
 import { INlpHubConfiguration } from "../..";
 
+/**
+ * Default recognizer.
+ * Used to send a default recognition result when all other recognizers failed.
+ */
 export class DefaultRecognizer extends Recognizer {
     defaultResult: IRecognizerResponse;
 
