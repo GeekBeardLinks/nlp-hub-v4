@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { NlpHub, INlpHubConfiguration } from './index';
-import fs from 'fs';
 
 describe('nlp-hub', () => {
   const configuration: INlpHubConfiguration = {
@@ -104,4 +103,40 @@ describe('nlp-hub', () => {
 
     } );
   });
+
+  describe('isAcceptable', () => {
+
+    it('undefined', () => {
+      const sut: NlpHub = new NlpHub(configuration);
+      const recognizerResult = undefined;
+      expect(sut.isAcceptable(recognizerResult)).to.be.equal(false);
+    });
+
+    it('null', () => {
+      const sut: NlpHub = new NlpHub(configuration);
+      const recognizerResult = null;
+      expect(sut.isAcceptable(recognizerResult)).to.be.equal(false);
+    });
+
+    it('under threshold', () => {
+      const sut: NlpHub = new NlpHub(configuration);
+      const recognizerResult = {
+        intent: {
+          score: 0.79
+        }
+      };
+      expect(sut.isAcceptable(recognizerResult)).to.be.equal(false);
+    });
+
+    it('acceptable result', () => {
+      const sut: NlpHub = new NlpHub(configuration);
+      const recognizerResult = {
+        intent: {
+          score: 0.89
+        }
+      };
+      expect(sut.isAcceptable(recognizerResult)).to.be.equal(true);
+    });
+  });
+
 });

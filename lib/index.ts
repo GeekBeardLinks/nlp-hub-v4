@@ -38,13 +38,11 @@ export class NlpHub {
     public async firstMatch(utterance: string) {
       for (const recognizer of this.recognizers) {
         const returnOfApp: any = await recognizer.recognize(utterance);
-          if (returnOfApp !== null) {
-            if (returnOfApp.intent.score > this.threshold) {
+          if (this.isAcceptable(returnOfApp)) {
               return returnOfApp;
           }
         }
     }
-  }
 
     public instanciateRecognizer(app: IRecognizerParams) {
       if (app.type in recognizersMap) {
@@ -52,5 +50,12 @@ export class NlpHub {
       } else {
         return (null);
       }
+    }
+
+    public isAcceptable(recognizerResult: any) {
+      return (recognizerResult !== undefined) &&
+      (recognizerResult !== null) &&
+      !(recognizerResult instanceof Error) &&
+      (recognizerResult.intent.score > this.threshold);
     }
 }
