@@ -7,11 +7,10 @@ describe('nlp-hub', () => {
     threshold: 0.8,
     defaultIntent: 'default',
     apps: [
-        { id: "HolaRegex", type: "regex", intent: "greetings", exp: "(^hola$|^holaa$|^holas$|^holi$|^holis$|^hi$|^hello$)" },
-        { id: "recommender", intent: "recommender", exp: "^Comprar vuelo$", type: "regex" },
-        { id: 'rasa', type: "rasa", appHost: "localhost:5000", exp: '' },
-        { id: 'luis', type: "luis", key: "a", appHost: "a", exp: '' },
-        { id: "qna", type: "qnamaker", kb: "055836dd-...", key: "bdf...", exp: '' }
+        { id: "HolaRegex", type: "regex", params: { intent: "greetings", exp: "(^hola$|^holaa$|^holas$|^holi$|^holis$|^hi$|^hello$)" }},
+        { id: "recommender", type: "regex", params: {intent: "recommender", exp: "^Comprar vuelo$",  }},
+        { id: 'rasa', type: "rasa", params: { appHost: "localhost:5000" }},
+        { id: 'luis', type: "luis", params: { appHost: "https://appHost", appId: "appId", key: 'key' }},
     ]
   };
 
@@ -84,8 +83,8 @@ describe('nlp-hub', () => {
           threshold: 0.8,
           defaultIntent: 'defaultIntent',
           apps: [
-              { id: "HolaRegex", type: "regex", intent: "greetings", exp: "(^hola$|^holaa$|^holas$|^holi$|^holis$|^hi$|^hello$)" },
-              { id: "recommender", intent: "recommender", exp: "^Comprar vuelo$", type: "regex" }
+              { id: "HolaRegex", type: "regex", params: {intent: "greetings", exp: "(^hola$|^holaa$|^holas$|^holi$|^holis$|^hi$|^hello$)" }},
+              { id: "recommender", type: "regex", params: {intent: "recommender", exp: "^Comprar vuelo$"} }
           ]
         };
         const sut: NlpHub = new NlpHub(caseConfiguration);

@@ -1,17 +1,18 @@
 import http = require('http');
 import localVarRequest = require('request');
-import { IApp, IAppResponse, IRecognizerResponse } from '../../model/app';
+import { IRecognizerParams, IAppResponse, IRecognizerResponse, IRasaRecognizerParams } from '../../model/app';
 import { IIntentLuis } from '../../model/luis-response';
 import { IEntitYRasa, IRasaResponse } from '../../model/rasa-response';
 import { Recognizer } from '../recognizer';
 export class RasaRecognizer extends Recognizer{
     baseUri: string;
     
-    constructor(configuration?: IApp){
+    constructor(configuration: IRecognizerParams){
         super();
         this.baseUri = '';
-        if(configuration){
-            this.baseUri = `${configuration.appHost}/parse`
+        const params = configuration.params as IRasaRecognizerParams;
+        if(params){
+            this.baseUri = `${params.appHost}/parse`
         }
     }
 
@@ -61,7 +62,7 @@ export class RasaRecognizer extends Recognizer{
 
     }
 
-    public async rasa(app: IApp, utterance: string): Promise<any> {
+    public async rasa(app: IRecognizerParams, utterance: string): Promise<any> {
         return this.recognize(utterance);
     }
 }

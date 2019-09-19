@@ -1,4 +1,4 @@
-import { IApp, IRecognizerResponse } from '../../model/app';
+import { IRecognizerParams, IRecognizerResponse, IRegexRecognizerParams } from '../../model/app';
 import { Recognizer } from '../recognizer';
 export class RegexRecognizer extends Recognizer {
     
@@ -6,16 +6,18 @@ export class RegexRecognizer extends Recognizer {
     intent: string | undefined;
     id: any;
 
-    constructor(configuration?: IApp) {
+    constructor(configuration: IRecognizerParams) {
         super();
-        if(configuration) {
-            this.regExp = new RegExp(configuration.exp, 'i');
-            this.intent = configuration.intent;
-            this.id = configuration.id;
+        this.id = configuration.id;
+        const params = configuration.params as IRegexRecognizerParams;
+
+        if(params) {
+            this.regExp = new RegExp(params.exp, 'i');
+            this.intent = params.intent;
         }
     }
 
-    recognize(utterance: string): Promise<IRecognizerResponse> {
+    public async recognize(utterance: string): Promise<IRecognizerResponse> {
         return new Promise((resolve, reject) => {
             if(this.regExp) {
                 const match = utterance.match(this.regExp);
@@ -35,23 +37,7 @@ export class RegexRecognizer extends Recognizer {
         });
     }
 
-    public async regex(app: IApp , utterance: string): Promise<any> {
-        return new Promise((resolve, reject) => {
-            const regExp = new RegExp(app.exp, 'i');
-            const match = utterance.match(regExp);
-            resolve(this.regexResponse(app, match));
-
-        });
-    }
-
-    public regexResponse(app: IApp, match: any) {
-        const r = {
-            engine: 'regex',
-            intent: {
-                name: app.intent,
-                score: match != null ? 1 : 0,
-            },
-        };
-        return r;
+    public async regex(app: IRecognizerParams , utterance: string): Promise<any> {
+        return this.recognize(utterance);
     }
 }

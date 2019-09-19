@@ -1,19 +1,20 @@
 import http = require('http');
 import localVarRequest = require('request');
-import { IApp, IAppResponse, IRecognizerResponse } from '../../model/app';
+import { IRecognizerParams, IAppResponse, IRecognizerResponse, ILuisRecognizerParams } from '../../model/app';
 import { IEntityLuis, IIntentLuis, ILuisResponse } from '../../model/luis-response';
 import { Recognizer } from '../recognizer';
 export class LuisRecognizer extends Recognizer {
 
     baseUri: string;
 
-    constructor(configuration?: IApp){
+    constructor(configuration: IRecognizerParams){
         super();
         
         this.baseUri = '';
+        const params = configuration.params as ILuisRecognizerParams;
 
-        if (configuration){
-            this.baseUri = `${configuration.appHost}/luis/v2.0/apps/${configuration.id}?subscription-key=${configuration.key}&timezoneOffset=0&verbose=true`;
+        if (params){
+            this.baseUri = `${params.appHost}/luis/v2.0/apps/${params.appId}?subscription-key=${params.key}&timezoneOffset=0&verbose=true`;
         }
     }
 
@@ -56,7 +57,7 @@ export class LuisRecognizer extends Recognizer {
         });
 }
 
-    public async luis(app: IApp, utterance: string): Promise<any> {
+    public async luis(app: IRecognizerParams, utterance: string): Promise<any> {
 
             return this.recognize(utterance);
     }

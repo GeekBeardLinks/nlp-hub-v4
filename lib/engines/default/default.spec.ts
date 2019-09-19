@@ -1,6 +1,6 @@
 import { DefaultRecognizer } from "./default";
 import { expect } from "chai";
-import { IRecognizerResponse, IApp } from "../../model/app";
+import { IRecognizerResponse } from "../../model/app";
 import { INlpHubConfiguration } from "../..";
 
 describe('DefaultRecognizer', () => {

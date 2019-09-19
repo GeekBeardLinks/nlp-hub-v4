@@ -1,14 +1,25 @@
 import { IIntentLuis } from './luis-response';
-export interface IApp {
+export interface IRecognizerParams {
     id: string;
     type: string;
-    intent?: string;
-    exp: string;
-    key?: string;
-    kb?: string;
-    appHost?: string;
-    appId?: string;
+    params: ILuisRecognizerParams | IRegexRecognizerParams | IRasaRecognizerParams ;
 }
+
+export interface IRegexRecognizerParams {
+    intent: string;
+    exp: string;
+}
+
+export interface ILuisRecognizerParams {
+    appId: string;
+    key: string;
+    appHost: string;
+}
+
+export interface IRasaRecognizerParams {
+    appHost: string;
+}
+
 // TODO: terminar de armar  modelo
 export interface IAppResponse {
     engine: string;
