@@ -1,23 +1,22 @@
 import { expect } from 'chai';
-import { LuisRecognizer } from '../luis';
 import { IRecognizerParams } from '../../../model/app';
+import { LuisRecognizer } from '../luis';
 import * as Constants from './luis.constants.spec';
 
 import luisMock from './luis.mock';
 luisMock(Constants.BASE_PATH);
 
-
 describe('LuisApp', () => {
     it('Can be instantiated', () => {
         const app: IRecognizerParams = {
             id: 'ID',
-            type: 'luis',
             params: {
-                key: 'APP_KEY',
                 appHost: 'LUIS_HOST',
-                appId: 'APP_ID'
-            }
-        }
+                appId: 'APP_ID',
+                key: 'APP_KEY',
+            },
+            type: 'luis',
+        };
 
         const sut: LuisRecognizer = new LuisRecognizer(app);
         expect(sut).to.be.a.instanceOf(LuisRecognizer);
@@ -85,7 +84,7 @@ describe('LuisApp', () => {
             await sut.recognice(Constants.QUERY_500);
         } catch (error) {
             expect(error).is.instanceOf(Error);
-            expect(error.message).to.be.equal('{"response":{"statusCode":500,"body":"{}","headers":{"content-type":"application/json"},"request":{"uri":{"protocol":"http:","slashes":true,"auth":null,"host":"westus.api.cognitive.microsoft.com","port":null,"hostname":"westus.api.cognitive.microsoft.com","hash":null,"search":"?subscription-key=SUBS_KEY&timezoneOffset=0&verbose=true&q=QUERY_500","query":"subscription-key=SUBS_KEY&timezoneOffset=0&verbose=true&q=QUERY_500","pathname":"/luis/v2.0/apps/APP_ID_500","path":"/luis/v2.0/apps/APP_ID_500?subscription-key=SUBS_KEY&timezoneOffset=0&verbose=true&q=QUERY_500","href":"http://westus.api.cognitive.microsoft.com/luis/v2.0/apps/APP_ID_500?subscription-key=SUBS_KEY&timezoneOffset=0&verbose=true&q=QUERY_500"},"method":"GET","headers":{}}},"body":"{}"}');
+            expect(error.message).to.be.equal('{"response":{"statusCode":500,"body":"{}","headers":{"content-type":"application/json"},"request":{"uri":{"protocol":"http:","slashes":true,"auth":null,"host":"westus.api.cognitive.microsoft.com","port":null,"hostname":"westus.api.cognitive.microsoft.com","hash":null,"search":"?q=QUERY_500&subscription-key=SUBS_KEY&timezoneOffset=0&verbose=true","query":"q=QUERY_500&subscription-key=SUBS_KEY&timezoneOffset=0&verbose=true","pathname":"/luis/v2.0/apps/APP_ID_500","path":"/luis/v2.0/apps/APP_ID_500?q=QUERY_500&subscription-key=SUBS_KEY&timezoneOffset=0&verbose=true","href":"http://westus.api.cognitive.microsoft.com/luis/v2.0/apps/APP_ID_500?q=QUERY_500&subscription-key=SUBS_KEY&timezoneOffset=0&verbose=true"},"method":"GET","headers":{}}},"body":"{}"}');
         }
         // expect(result.intent).is.deep.equal({
         //     name: "INTENT.204",
