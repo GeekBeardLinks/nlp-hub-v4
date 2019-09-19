@@ -18,6 +18,7 @@ export class RasaRecognizer extends Recognizer{
 
     public recognize(utterance: string): Promise<IRecognizerResponse> {
         const options: localVarRequest.Options = {
+            method: 'POST',
             body: {
                 q: utterance,
             },
@@ -34,7 +35,8 @@ export class RasaRecognizer extends Recognizer{
                     reject(error);
                 } else {
                     if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-                        body = JSON.parse(body);
+                        //TODO: check nock for response types.
+                        // body = JSON.parse(body);
                         const intent: IIntentLuis = {
                             intent: body.intent.name,
                             score: body.intent.score,
