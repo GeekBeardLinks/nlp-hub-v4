@@ -1,5 +1,5 @@
 import { Recognizer } from "../recognizer";
-import { IRecognizerResponse, IApp } from "../../model/app";
+import { IRecognizerResponse, IRecognizerParams } from "../../model/app";
 import { INlpHubConfiguration } from "../..";
 
 /**

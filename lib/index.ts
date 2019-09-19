@@ -2,13 +2,13 @@ import fs from 'fs';
 import { LuisRecognizer } from './engines/luis/luis';
 import { RasaRecognizer } from './engines/rasa/rasa';
 import { RegexRecognizer } from './engines/regex/regex';
-import { IApp } from './model/app';
+import { IRecognizerParams } from './model/app';
 import { DefaultRecognizer } from './engines/default/default';
 
 export interface INlpHubConfiguration {
   threshold: number;
   defaultIntent: string;
-  apps: IApp[];
+  apps: IRecognizerParams[];
 }
 
 let recognizersMap: {[index: string]: any} = {
@@ -19,7 +19,7 @@ let recognizersMap: {[index: string]: any} = {
 
 export class NlpHub {
     public threshold: number;
-    public apps!: IApp[];
+    public apps!: IRecognizerParams[];
     public recognizers!: any[];
 
     constructor(configuration: INlpHubConfiguration) {
@@ -46,7 +46,7 @@ export class NlpHub {
     }
   }
 
-    public instanciateRecognizer(app: IApp) {
+    public instanciateRecognizer(app: IRecognizerParams) {
       if (app.type in recognizersMap) {
         return new recognizersMap[app.type](app);
       } else {
